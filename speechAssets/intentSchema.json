@@ -1,48 +1,61 @@
 {
-	  "intents": [
-	    {
-	      "intent": "AnswerIntent",
-	      "slots": [
-	        {
-	          "name": "Answer",
-	          "type": "LIST_OF_ANSWERS"
-	        }
-	      ]
-	    },
+  "intents": [
+    {
+      "intent": "ReviewSetIntent"
 
-	        {
-	      "intent": "AnswerOnlyIntent",
-	      "slots": [
-	        {
-	          "name": "Answer",
-	          "type": "LIST_OF_ANSWERS"
-	        }
-	      ]
-	    },
+    },
 
-	    {
-	      "intent": "DontKnowIntent"
-	    },
-	    {
-	      "intent": "AMAZON.StartOverIntent"
-	    },
-	    {
-	      "intent": "AMAZON.RepeatIntent"
-	    },
-	    {
-	      "intent": "AMAZON.HelpIntent"
-	    },
-	    {
-	      "intent": "AMAZON.YesIntent"
-	    },
-	    {
-	      "intent": "AMAZON.NoIntent"
-	    },
-	    {
-	      "intent": "AMAZON.StopIntent"
-	    },
-	    {
-	      "intent": "AMAZON.CancelIntent"
-	    }
-	  ]
-	}
+    {
+      "intent": "PreviousSetIntent"
+
+    },
+
+    {
+      "intent": "ExamSetRecording",
+      "slots": [
+        {
+          "name": "Remember",
+          "type": "Things_To_Study"
+        }
+      ]
+    },
+    
+    { "intent": "CompleteRecording"
+    },
+
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+
+    {
+      "intent": "Amazon.NoIntent"
+    },
+
+    {
+      "intent": "NameExamSet",
+      "slots": [
+        {
+          "name": "TheName",
+          "type": "Called_What"
+        }
+      ]
+    },
+
+    {
+      "intent": "CallExamSet",
+      "slots": [
+      	{
+      	  "name": "aSet",
+      	  "type": "From_Database"
+
+
+
+        }
+      ]
+    },
+
+    {
+      "intent": "ListSets"
+    }
+]
+}
