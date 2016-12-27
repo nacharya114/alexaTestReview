@@ -32,10 +32,10 @@
     },
 
     {
-      "intent": "TitleIntent",
+      "intent": "Title",
       "slots": [
         {
-          "name": "TheName",
+          "name": "Title",
           "type": "Called_What"
         }
       ]
