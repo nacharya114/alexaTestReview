@@ -16,6 +16,7 @@ var makeNewSet = "newSet";
  */
 var AlexaSkill = require('./AlexaSkill');
 var db = require('./storage');
+var list = require('./listManager').getInstance();
 
 var TestReview = function () {
     AlexaSkill.call(this, APP_ID);
@@ -60,26 +61,56 @@ TestReview.prototype.intentHandlers = {
                 response.tell(speechOutput);
                 return;
             }
-            session,attributes[makeNewSet] = false;
+            session.attributes[makeNewSet] = false;
             var tellResponse = "Here are the lists I found:" + lists.map((item) => item.name).join(', ');
             var repromptText = "Which list would you like to review";
             response.ask(tellResponse, repromptText);
         });
     },
     ExamSetRecording: function(intent, session, response) {
-
+        var listItem = intent.slots.Remember;
+        if (!session.attributes[makeNewSet]) {
+            var speechOutput = "You haven't decided to make a set, so I can't complete your request.";
+            response.tell(speechOutput);
+            return;
+        } if (!session.attributes[KEY_TITLE_SET]) {
+            var speechOutput = "You haven't specified a title for this set yet.";
+            response.tell(speechOutput);
+            return;
+        }
+        list.addToList(listItem.value);
+        response.ask('','');
     },
     CompleteRecording: function(intent, session, response) {
+        if (!session.attributes[makeNewSet]) {
+            var speechOutput = "You haven't decided to make a set, so I can't complete your request.";
+            response.tell(speechOutput);
+            return;
+        } if (!session.attributes[KEY_TITLE_SET]) {
+            var speechOutput = "You haven't specified a title for this set yet.";
+            response.tell(speechOutput);
+            return;
+        }
+        if (list.isEmpty()) {
+            var speechOutput = "There are no items in your review set";
+            response.tell(speechOutput);
+            return;
+        }
+
+        storage.saveReviewSet(session, list.saveList()).then(function(resp) {
+            console.log(resp);
+            var speechOutput = "Okay, your set is saved";
+            response.tell(speechOutput);
+        });
 
     },
     TitleIntent: function(intent, session, response) {
         var titleSlot = intent.slots.title;
         session.attributes[KEY_TITLE_SET] = titleSlot.value.replace(/\.\s*/g, '').toLowerCase();
         if (session.attributes[makeNewSet]) {
-            var speechText = "Okay, the set is now named " + titleSlot.value + ". Please start your review set by saying <break time=\"02s\"/>
-             Remember blank";
-            var repromptText = "Please start your review set by saying <break time=\"02s\"/>
-             Remember blank";
+            var speechText = "Okay, the set is now named " + titleSlot.value + ". Please start your review set by saying <break time=\"02s\"/> Remember blank";
+            var repromptText = "Please start your review set by saying <break time=\"02s\"/>" +
+             "Remember blank";
             var speechOutput = {
                 speech: speechText,
                 type: AlexaSkill.speechOutputType.SSML
@@ -113,7 +144,7 @@ TestReview.prototype.intentHandlers = {
                 response.tell(speechOutput);
                 return;
             }
-            session,attributes[makeNewSet] = false;
+            session.attributes[makeNewSet] = false;
             var tellResponse = "Here are the lists I found:" + lists.map((item) => item.name).join(', ');
             var repromptText = "Which list would you like to review";
             response.ask(tellResponse, repromptText);

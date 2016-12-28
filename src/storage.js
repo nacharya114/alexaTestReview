@@ -13,7 +13,7 @@ var storage = (function () {
     return {
         getReviewSets: function(session) {
             var p = new Promise((resolve, reject) =>{
-                reviewSetTable.batchFind([session.user.userId]).then(function(resp){
+                reviewSetTable.finaAll(session.user.userId).then(function(resp){
                     console.log(resp);
                     resolve(resp);
                 }).catch(function(err){
@@ -21,7 +21,7 @@ var storage = (function () {
                 });
             });
             return p;
-        }
+        },
         getReviewSet: function(session) {
             var p = new Promise((resolve, reject)=>{
                 reviewSetTable.batchFind([{hash: session.user.userId, range: session.attributes['title']}])
@@ -29,6 +29,19 @@ var storage = (function () {
                     resolve(sets);
                 });
             });
+            return p;
+        },
+        saveReviewSet: function(session, item) {
+            var p = new Promise((resolve, reject)=>{
+                reviewSetTable.insert({
+                    userId: session.user.userId,
+                    title: session.attributes["title"],
+                    Data: item
+                }).then((resp)=>{
+                    resolve();
+                });
+            });
+            return p;
         }
     };
 })();
