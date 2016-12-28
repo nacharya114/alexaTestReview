@@ -69,7 +69,56 @@ TestReview.prototype.intentHandlers = {
     ExamSetRecording: function(intent, session, response) {
 
     },
+    CompleteRecording: function(intent, session, response) {
 
+    },
+    TitleIntent: function(intent, session, response) {
+        var titleSlot = intent.slots.title;
+        session.attributes[KEY_TITLE_SET] = titleSlot.value.replace(/\.\s*/g, '').toLowerCase();
+        if (session.attributes[makeNewSet]) {
+            var speechText = "Okay, the set is now named " + titleSlot.value + ". Please start your review set by saying <break time=\"02s\"/>
+             Remember blank";
+            var repromptText = "Please start your review set by saying <break time=\"02s\"/>
+             Remember blank";
+            var speechOutput = {
+                speech: speechText,
+                type: AlexaSkill.speechOutputType.SSML
+            }
+            var repromptOutput = {
+                speech: repromptText,
+                type: AlexaSkill.speechOutputType.SSML
+            }
+            response.ask(speechOutput, repromptOutput);
+        } else {
+            db.getReviewSet(session).then((items) => {
+                if (!items) {
+                    var speechOutput = "Sorry, this review set is empty or doesn't exist";
+                    response.tell(speechOutput);
+                    return;
+                }
+                var tellResponse = "Remember " + lists.map((item) => item.name).join('<break time = \"0.3s\"/>Remember, ');
+                //var repromptText = "Which list would you like to review";
+                var tellObj = {
+                    speech:  tellResponse,
+                    type: AlexaSkill.speechOutputType.SSML
+                }
+                response.tell(tellObj);
+            });
+        }
+    },
+    ListSets: function(intent, session, response) {
+         db.getReviewSets(session).then((lists) => {
+            if (!lists) {
+                var speechOutput = "Sorry, I couldn't find any review sets on your account";
+                response.tell(speechOutput);
+                return;
+            }
+            session,attributes[makeNewSet] = false;
+            var tellResponse = "Here are the lists I found:" + lists.map((item) => item.name).join(', ');
+            var repromptText = "Which list would you like to review";
+            response.ask(tellResponse, repromptText);
+        });
+    }
 };
 
 

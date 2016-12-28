@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "alexa-sdk": "^1.0.6",
-    "aws-sdk": "^2.7.19"
+    "aws-sdk": "^2.7.19",
+    "dynasty": "^0.2.6"
   }
 }
