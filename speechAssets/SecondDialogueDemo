@@ -1,0 +1,7 @@
+ExamSetRecording remember {Remember}
+ExamSetRecording record {Remember}
+ExamSetRecording new item {Remember}
+
+CompleteRecording finish
+CompleteRecording i am finished
+CompleteRecording i'm finished
