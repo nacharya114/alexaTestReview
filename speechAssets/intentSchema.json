@@ -14,7 +14,7 @@
       "intent": "ExamSetRecording",
       "slots": [
         {
-          "name": "Remember",
+          "name": "remember",
           "type": "Things_To_Study"
         }
       ]
@@ -35,13 +35,13 @@
       "intent": "Title",
       "slots": [
         {
-          "name": "Title",
+          "name": "title",
           "type": "Called_What"
         }
       ]
     },
 
-    
+
 
     {
       "intent": "ListSets"

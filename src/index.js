@@ -68,7 +68,7 @@ TestReview.prototype.intentHandlers = {
         });
     },
     ExamSetRecording: function(intent, session, response) {
-        var listItem = intent.slots.Remember;
+        var listItem = intent.slots.remember;
         if (!session.attributes[makeNewSet]) {
             var speechOutput = "You haven't decided to make a set, so I can't complete your request.";
             response.tell(speechOutput);
