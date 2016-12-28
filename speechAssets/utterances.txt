@@ -13,3 +13,17 @@ PreviousSetIntent previous
 PreviousSetIntent former set
 PreviousSetIntent review previous
 PreviousSetIntent one from before
+
+ExamSetRecording remember {Remember}
+ExamSetRecording record {Remember}
+ExamSetRecording new item {Remember}
+
+CompleteRecording finish
+CompleteRecording i am finished
+CompleteRecording i'm finished
+
+Title {Title}
+
+ListSets list sets
+ListSets list previous sets
+ListSets list former sets
