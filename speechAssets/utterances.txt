@@ -2249,6 +2249,9 @@ CompleteRecording done
 CompleteRecording i'm done
 
 TitleIntent {title}
+TitleIntent review {title}
+TitleIntent I want you to review {title}
+TitleIntent please review {title}
 
 ListSets list sets
 ListSets list previous sets
