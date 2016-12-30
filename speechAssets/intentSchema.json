@@ -26,13 +26,8 @@
     {
       "intent": "AMAZON.YesIntent"
     },
-
     {
-      "intent": "Amazon.NoIntent"
-    },
-
-    {
-      "intent": "Title",
+      "intent": "TitleIntent",
       "slots": [
         {
           "name": "title",
@@ -40,9 +35,6 @@
         }
       ]
     },
-
-
-
     {
       "intent": "ListSets"
     }

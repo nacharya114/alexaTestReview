@@ -32,8 +32,8 @@ var listManager = (function (){
             return list;
         },
         isEmpty: function() {
-            if (list.length ==0)
-                return false;
+            if (list.length === 0) {
+                return false; }
             return true;
         }
 

@@ -16,7 +16,7 @@ var makeNewSet = "newSet";
  */
 var AlexaSkill = require('./AlexaSkill');
 var db = require('./storage');
-var list = require('./listManager').getInstance();
+var list = require('./listManager');
 
 var TestReview = function () {
     AlexaSkill.call(this, APP_ID);
@@ -108,8 +108,8 @@ TestReview.prototype.intentHandlers = {
         var titleSlot = intent.slots.title;
         session.attributes[KEY_TITLE_SET] = titleSlot.value.replace(/\.\s*/g, '').toLowerCase();
         if (session.attributes[makeNewSet]) {
-            var speechText = "Okay, the set is now named " + titleSlot.value + ". Please start your review set by saying <break time=\"02s\"/> Remember blank";
-            var repromptText = "Please start your review set by saying <break time=\"02s\"/>" +
+            var speechText = "Okay, the set is now named " + titleSlot.value + ". Please start your review set by saying <break time=\"0.2s\"/> Remember blank";
+            var repromptText = "Please start your review set by saying <break time=\"0.2s\"/>" +
              "Remember blank";
             var speechOutput = {
                 speech: speechText,

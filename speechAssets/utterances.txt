@@ -14,15 +14,15 @@ PreviousSetIntent former set
 PreviousSetIntent review previous
 PreviousSetIntent one from before
 
-ExamSetRecording remember {Remember}
-ExamSetRecording record {Remember}
-ExamSetRecording new item {Remember}
+ExamSetRecording remember {remember}
+ExamSetRecording record {remember}
+ExamSetRecording new item {remember}
 
 CompleteRecording finish
 CompleteRecording i am finished
 CompleteRecording i'm finished
 
-Title {Title}
+TitleIntent {title}
 
 ListSets list sets
 ListSets list previous sets

@@ -5,44 +5,45 @@ var credentials = {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 };
 
-var dynasty = require('dynasty')(credentials, 'localhost:8000');
+var dynasty = require('dynasty')(credentials);
 
-var storage = (function () {
+var storage = function () {
     'use strict';
     var reviewSetTable = dynasty.table('ReviewSets');
     return {
-        getReviewSets: function(session) {
-            var p = new Promise((resolve, reject) =>{
-                reviewSetTable.finaAll(session.user.userId).then(function(resp){
+        getReviewSets: function (session) {
+            var p = new Promise(function (resolve, reject) {
+                reviewSetTable.finaAll(session.user.userId).then(function (resp) {
                     console.log(resp);
                     resolve(resp);
-                }).catch(function(err){
+                }).catch(function (err) {
                     reject(err);
                 });
             });
             return p;
         },
-        getReviewSet: function(session) {
-            var p = new Promise((resolve, reject)=>{
+        getReviewSet: function (session) {
+            var p = new Promise(function (resolve, reject) {
                 reviewSetTable.batchFind([{hash: session.user.userId, range: session.attributes['title']}])
-                .then(function(sets){
+                .then(function (sets) {
                     resolve(sets);
                 });
             });
             return p;
         },
-        saveReviewSet: function(session, item) {
-            var p = new Promise((resolve, reject)=>{
+        saveReviewSet: function (session, item) {
+            var p = new Promise(function (resolve, reject) {
                 reviewSetTable.insert({
                     userId: session.user.userId,
                     title: session.attributes["title"],
                     Data: item
-                }).then((resp)=>{
+                }).then(function (resp) {
+                    console.log(resp);
                     resolve();
                 });
             });
             return p;
         }
     };
-})();
+};
 module.exports = storage;
