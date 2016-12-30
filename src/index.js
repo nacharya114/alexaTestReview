@@ -10,13 +10,12 @@ var APP_ID = undefined; //replace with "amzn1.echo-sdk-ams.app.[your-unique-valu
 
 var KEY_TITLE_SET = "title";
 var makeNewSet = "newSet";
-
+var itemList = "items";
 /**
  * The AlexaSkill prototype and helper functions
  */
 var AlexaSkill = require('./AlexaSkill');
 var db = require('./storage');
-var list = require('./listManager');
 
 var TestReview = function () {
     AlexaSkill.call(this, APP_ID);
@@ -30,6 +29,7 @@ TestReview.prototype.eventHandlers.onSessionStarted = function (sessionStartedRe
     console.log("TestReview onSessionStarted requestId: " + sessionStartedRequest.requestId
         + ", sessionId: " + session.sessionId);
     // any initialization logic goes here
+    session.attributes[itemList] = "[]";
 };
 
 TestReview.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
@@ -78,7 +78,10 @@ TestReview.prototype.intentHandlers = {
             response.tell(speechOutput);
             return;
         }
-        list.addToList(listItem.value);
+        var tempJson = JSON.parse(session.attributes[itemList]);
+        tempJson.push(listItem.value);
+        session.attributes[itemList] = JSON.stringify(tempJson);
+
         response.ask('','');
     },
     CompleteRecording: function(intent, session, response) {
@@ -91,13 +94,16 @@ TestReview.prototype.intentHandlers = {
             response.tell(speechOutput);
             return;
         }
-        if (list.isEmpty()) {
+        var tempJson = JSON.parse(session.attributes[itemList]);
+
+        //if (list.isEmpty()) {
+        if (tempJson.isEmpty()) {
             var speechOutput = "There are no items in your review set";
             response.tell(speechOutput);
             return;
         }
 
-        storage.saveReviewSet(session, list.saveList()).then(function(resp) {
+        storage.saveReviewSet(session, session.attributes[itemList]).then(function(resp) {
             console.log(resp);
             var speechOutput = "Okay, your set is saved";
             response.tell(speechOutput);
@@ -121,13 +127,13 @@ TestReview.prototype.intentHandlers = {
             }
             response.ask(speechOutput, repromptOutput);
         } else {
-            db.getReviewSet(session).then((items) => {
-                if (!items) {
+            db.getReviewSet(session).then((itemsOnList) => {
+                if (!itemsOnList) {
                     var speechOutput = "Sorry, this review set is empty or doesn't exist";
                     response.tell(speechOutput);
                     return;
                 }
-                var tellResponse = "Remember " + lists.map((item) => item.name).join('<break time = \"0.3s\"/>Remember, ');
+                var tellResponse = "Remember " + itemsOnList.map((item) => item.name).join('<break time = \"0.3s\"/>Remember, ');
                 //var repromptText = "Which list would you like to review";
                 var tellObj = {
                     speech:  tellResponse,
