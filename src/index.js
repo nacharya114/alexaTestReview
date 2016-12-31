@@ -105,10 +105,11 @@ TestReview.prototype.intentHandlers = {
 
         storage.saveReviewSet(session, session.attributes[itemList]).then(function(resp) {
             console.log(resp);
+            session.attributes["DEBUG"] = resp;
             var speechOutput = "Okay, your set is saved";
             response.tell(speechOutput);
-        })
-        .catch(function (err) {
+        }, function (err) {
+            session.attributes["DEBUG"] = err;
             console.log(err);
             response.tell("Sorry, there was a problem with the database.");
         });
