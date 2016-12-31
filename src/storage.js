@@ -39,7 +39,9 @@ var storage = function () {
                     Data: item
                 }).then(function (resp) {
                     console.log(resp);
-                    resolve();
+                    resolve(resp);
+                }).catch(function (err) {
+                    reject(err);
                 });
             });
             return p;

@@ -97,7 +97,7 @@ TestReview.prototype.intentHandlers = {
         var tempJson = JSON.parse(session.attributes[itemList]);
 
         //if (list.isEmpty()) {
-        if (tempJson.isEmpty()) {
+        if (tempJson.length === 0) {
             var speechOutput = "There are no items in your review set";
             response.tell(speechOutput);
             return;
@@ -107,6 +107,10 @@ TestReview.prototype.intentHandlers = {
             console.log(resp);
             var speechOutput = "Okay, your set is saved";
             response.tell(speechOutput);
+        })
+        .catch(function (err) {
+            console.log(err);
+            response.tell("Sorry, there was a problem with the database.");
         });
 
     },
