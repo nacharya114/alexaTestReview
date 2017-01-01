@@ -26,8 +26,22 @@
     {
       "intent": "AMAZON.YesIntent"
     },
+
     {
-      "intent": "TitleIntent",
+      "intent": "Amazon.NoIntent"
+    },
+    {
+      "intent": "DictionaryIntent",
+      "slots": [
+        {
+          "name": "word",
+          "type": "Look_Words_Up"
+        }
+      ]
+    },
+
+    {
+      "intent": "Title",
       "slots": [
         {
           "name": "title",
@@ -35,6 +49,9 @@
         }
       ]
     },
+
+
+
     {
       "intent": "ListSets"
     }
