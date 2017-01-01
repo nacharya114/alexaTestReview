@@ -2280,3 +2280,13 @@ ListSets list them for me
 ListSets list the sets
 ListSets i need the list
 
+DictionaryIntent look up {word}
+DictionaryIntent define {word}
+DictionaryIntent please look up {word}
+DictionaryIntent please define {word}
+DictionaryIntent can you define {word} please
+DictionaryIntent can you define {word}
+DictionaryIntent what does {word} mean
+DictionaryIntent what is the definition of {word}
+DictionaryIntent what is {word}
+
