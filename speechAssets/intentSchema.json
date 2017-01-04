@@ -28,7 +28,7 @@
     },
 
     {
-      "intent": "Amazon.NoIntent"
+      "intent": "AMAZON.NoIntent"
     },
     {
       "intent": "DictionaryIntent",
@@ -41,7 +41,7 @@
     },
 
     {
-      "intent": "Title",
+      "intent": "TitleIntent",
       "slots": [
         {
           "name": "title",
