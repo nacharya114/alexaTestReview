@@ -171,8 +171,8 @@ TestReview.prototype.intentHandlers = {
                 return;
             }
             session.attributes[makeNewSet] = false;
-            var tellResponse = "Here are the lists I found:" + lists.map((item) => item.title).join(', ');
-            var repromptText = " <break time=\"0.2s\"/> Which list would you like to review";
+            var tellResponse = "Here are the lists I found:" + lists.map((item) => item.title).join(', ') + "<break time=\"0.2s\"/>";
+            var repromptText = "Which list would you like to review";
             tellResponse = tellResponse + repromptText;
             response.ask(tellResponse, repromptText);
         });
