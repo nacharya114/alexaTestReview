@@ -1,8 +1,8 @@
 //var AWS = require("aws-sdk");
 
 var credentials = {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    accessKeyId: process.env.TEST_USER_ID,
+    secretAccessKey: process.env.TEST_USER_SECRET
 };
 
 var dynasty = require('dynasty')(credentials);
@@ -13,7 +13,7 @@ var storage = function () {
     return {
         getReviewSets: function (session) {
             var p = new Promise(function (resolve, reject) {
-                reviewSetTable.finaAll(session.user.userId).then(function (resp) {
+                reviewSetTable.findAll(session.user.userId).then(function (resp) {
                     console.log(resp);
                     resolve(resp);
                 }).catch(function (err) {
@@ -24,9 +24,12 @@ var storage = function () {
         },
         getReviewSet: function (session) {
             var p = new Promise(function (resolve, reject) {
-                reviewSetTable.batchFind([{hash: session.user.userId, range: session.attributes['title']}])
+                reviewSetTable.find({hash: session.user.userId, range: session.attributes['title']})
                 .then(function (sets) {
                     resolve(sets);
+                })
+                .catch((err)=>{
+                    reject(err);
                 });
             });
             return p;

@@ -15,7 +15,7 @@ var itemList = "items";
  * The AlexaSkill prototype and helper functions
  */
 var AlexaSkill = require('./AlexaSkill');
-var db = require('./storage');
+var db = require('./storage')();
 
 var TestReview = function () {
     AlexaSkill.call(this, APP_ID);
@@ -55,16 +55,20 @@ TestReview.prototype.intentHandlers = {
         response.ask(speechOutput, repromptText);
     },
     PreviousSetIntent: function(intent, session, response) {
-        db.getReviewSets(session).then((lists) => {
+        db.getReviewSets(session).then(function (lists) {
             if (!lists) {
                 var speechOutput = "Sorry, I couldn't find any review sets on your account";
                 response.tell(speechOutput);
                 return;
             }
             session.attributes[makeNewSet] = false;
-            var tellResponse = "Here are the lists I found:" + lists.map((item) => item.name).join(', ');
+            var tellResponse = "Here are the lists I found:" + lists.map((item) => item.title).join(', ');
             var repromptText = "Which list would you like to review";
+            tellResponse = tellResponse + repromptText;
             response.ask(tellResponse, repromptText);
+        }, function (err) {
+            session.attributes["DEBUG"] = err;
+            response.tell("I can't do this");
         });
     },
     ExamSetRecording: function(intent, session, response) {
@@ -103,7 +107,7 @@ TestReview.prototype.intentHandlers = {
             return;
         }
 
-        storage.saveReviewSet(session, session.attributes[itemList]).then(function(resp) {
+        db.saveReviewSet(session, session.attributes[itemList]).then(function(resp) {
             console.log(resp);
             session.attributes["DEBUG"] = resp;
             var speechOutput = "Okay, your set is saved";
@@ -132,19 +136,30 @@ TestReview.prototype.intentHandlers = {
             }
             response.ask(speechOutput, repromptOutput);
         } else {
-            db.getReviewSet(session).then((itemsOnList) => {
+            db.getReviewSet(session).then((itemLists) => {
+                var itemsOnList = JSON.parse(itemLists.Data);
                 if (!itemsOnList) {
                     var speechOutput = "Sorry, this review set is empty or doesn't exist";
                     response.tell(speechOutput);
                     return;
                 }
-                var tellResponse = "Remember " + itemsOnList.map((item) => item.name).join('<break time = \"0.3s\"/>Remember, ');
+
+                //TODO: Make a loop for items in reviewset
+                session.attributes["DEBUG"] = itemsOnList;
+                var tellResponse = "Remember ";
+                for (var i = 0; i < itemsOnList.length; i++) {
+                    tellResponse += itemsOnList[i] + '<break time = \"0.3s\"/>Remember, ';
+                }
+
                 //var repromptText = "Which list would you like to review";
                 var tellObj = {
                     speech:  tellResponse,
                     type: AlexaSkill.speechOutputType.SSML
                 }
                 response.tell(tellObj);
+            }, (err)=>{
+                session.attributes["DEBUG"] = err;
+                response.tell("Sorry, there was a problem with the database.");
             });
         }
     },
@@ -156,8 +171,9 @@ TestReview.prototype.intentHandlers = {
                 return;
             }
             session.attributes[makeNewSet] = false;
-            var tellResponse = "Here are the lists I found:" + lists.map((item) => item.name).join(', ');
+            var tellResponse = "Here are the lists I found:" + lists.map((item) => item.title).join(', ');
             var repromptText = "Which list would you like to review";
+            tellResponse = tellResponse + repromptText;
             response.ask(tellResponse, repromptText);
         });
     }
